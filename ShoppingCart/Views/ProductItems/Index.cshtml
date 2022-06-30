@@ -1,0 +1,98 @@
+﻿@model ShoppingCart.Models.ViewModels.ProductItemViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Artículos</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ProductTypeId" class="control-label"></label>
+                <select asp-for="ProductTypeId" class ="form-control" asp-items="ViewBag.ProductTypes" id="ProductTypeId" onchange="GetProductsById()"></select>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="ProductId" class="control-label"></label>
+                <select asp-for="ProductId" class ="form-control" id="ProductId"  onchange="GetProductItemsById()">
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
+<br />
+<div id="dvPartial"></div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script type="text/javascript">
+    function GetProductsById() {
+        var selectedProductTypeId = $("#ProductTypeId").find(":selected").val();
+        console.log("selectedProductTypeId = " + selectedProductTypeId);
+
+        $.ajax({
+            type: "GET",
+            url: "/ProductItems/OnGetProductsById",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: {
+                selectedProductTypeId: selectedProductTypeId
+            },
+            success:function (data) {
+                console.log(data);
+                $("#ProductId").empty();
+            $.each(data, function (index, row) {
+                $("#ProductId").append("<option value='" + row.value + "'>" + row.text + "</option>");
+            });
+            GetProductItemsById();
+            },
+            error: function() {
+                console.log("failure");
+            }
+        })
+    }
+
+    function GetProductItemsById() {
+        var selectedProductId = $("#ProductId").find(":selected").val();
+        console.log("selectedProductId = " + selectedProductId);
+
+            $.ajax({
+                type: "GET",
+                url: "/ProductItems/IndexPartial",
+                beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+                 },
+                 data: {
+                selectedProductId: selectedProductId
+                 },
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#dvPartial').html(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+
+        window.onload = function () {
+       GetProductsById();
+    };
+</script>
+
+}

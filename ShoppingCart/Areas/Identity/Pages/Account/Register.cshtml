@@ -1,0 +1,134 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Registrarse";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h2>Crear una cuenta nueva</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.FirstName" class="control-label"></label>
+                <input asp-for="Input.FirstName" class="form-control" autocomplete="first-name" aria-required="true" />
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Input.LastName" class="control-label"></label>
+                <input asp-for="Input.LastName" class="form-control" autocomplete="last-name" aria-required="true" />
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Input.IdentificationTypeId" class="control-label"></label>
+                <select asp-for="Input.IdentificationTypeId" class="form-control"
+                        asp-items="@Model.IdentificationTypes">
+                    <option value="">-- Seleccionar tipo de identificación --</option>
+                </select>
+                <span asp-validation-for="Input.IdentificationTypeId" class="text-danger" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Input.Identification" class="control-label"></label>
+                <input asp-for="Input.Identification" class="form-control" autocomplete="identification" aria-required="true" />
+                <span asp-validation-for="Input.Identification" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Input.PhoneNumber" class="control-label"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="phone-number" aria-required="true" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Input.Address" class="control-label"></label>
+                <input asp-for="Input.Address" class="form-control" autocomplete="address" aria-required="true" />
+                <span asp-validation-for="Input.Address" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Input.UserAddressProvinceId" class="control-label"></label>
+                <select asp-for="Input.UserAddressProvinceId" class="form-control" asp-items="@Model.UserAddressProvinces" id="UserAddressProvinceId" onchange="GetUserAddressCitiesById()">
+                    <option value="">-- Seleccionar provincia o departamento --</option>
+                </select>
+                <span asp-validation-for="Input.UserAddressProvinceId" class="text-danger" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Input.UserAddressCityId" class="control-label"></label>
+                <select asp-for="Input.UserAddressCityId" class="form-control" id="SelectedUserAddressCities">
+                    <option value="">-- Seleccionar ciudad --</option>
+                </select>
+                <span asp-validation-for="Input.UserAddressCityId" class="text-danger" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Input.PostalCode" class="control-label"></label>
+                <input asp-for="Input.PostalCode" class="form-control" autocomplete="address" aria-required="true" />
+                <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Input.Email" class="control-label"></label>
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Input.Password" class="control-label"></label>
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword" class="control-label"></label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <br />
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Registrarse</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+<script type="text/javascript">
+    function GetUserAddressCitiesById() {
+        var selectedUserAddressProvinceId = $("#UserAddressProvinceId").find(":selected").val();
+        console.log("selectedUserAddressProvinceId = " + selectedUserAddressProvinceId);
+
+        $.ajax({
+            type: "GET",
+            url: "/Identity/Account/Register?handler=UserAddressCitiesById",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: {
+                selectedUserAddressProvinceId: selectedUserAddressProvinceId
+            },
+            success:function (data) {
+                console.log(data);
+                $("#SelectedUserAddressCities").empty();
+                $("#SelectedUserAddressCities").append("<option value=''>-- Seleccionar ciudad --</option>");
+            $.each(data, function (index, row) {
+                $("#SelectedUserAddressCities").append("<option value='" + row.value + "'>" + row.text + "</option>");
+            });
+            },
+            error: function() {
+                console.log("failure");
+            }
+        })
+    }
+</script>
+
+}
+
+
+
