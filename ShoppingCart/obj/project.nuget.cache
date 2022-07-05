@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lcQ/10B79Y0V/hN7aczUof6XEBmJe5WunLKXYclGy4L2E5pKrxUWJKsZ0NbOeCHZ7QDOD5M33kz8ioHFi2kIxg==",
+  "dgSpecHash": "CQtDvRV84IR9aGTAW3Ex5pUpeMIJPyv/Z/EPp4Lzd5ZlrXhDNjrfaWYVm8e1YTkgdpwlpAC3I4rynMeEb+Gdvw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\jonat\\OneDrive\\Escritorio\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj",
+  "projectFilePath": "C:\\Users\\jonat\\OneDrive\\Escritorio\\Nueva carpeta\\ShoppingCart\\ShoppingCart.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jonat\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\jonat\\.nuget\\packages\\messagepack\\2.1.152\\messagepack.2.1.152.nupkg.sha512",

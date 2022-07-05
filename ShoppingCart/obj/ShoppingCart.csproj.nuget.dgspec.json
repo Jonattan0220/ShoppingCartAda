@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jonat\\OneDrive\\Escritorio\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj": {}
+    "C:\\Users\\jonat\\OneDrive\\Escritorio\\Nueva carpeta\\ShoppingCart\\ShoppingCart.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jonat\\OneDrive\\Escritorio\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj": {
+    "C:\\Users\\jonat\\OneDrive\\Escritorio\\Nueva carpeta\\ShoppingCart\\ShoppingCart.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jonat\\OneDrive\\Escritorio\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj",
+        "projectUniqueName": "C:\\Users\\jonat\\OneDrive\\Escritorio\\Nueva carpeta\\ShoppingCart\\ShoppingCart.csproj",
         "projectName": "ShoppingCart",
-        "projectPath": "C:\\Users\\jonat\\OneDrive\\Escritorio\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj",
+        "projectPath": "C:\\Users\\jonat\\OneDrive\\Escritorio\\Nueva carpeta\\ShoppingCart\\ShoppingCart.csproj",
         "packagesPath": "C:\\Users\\jonat\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jonat\\OneDrive\\Escritorio\\ShoppingCart\\ShoppingCart\\obj\\",
+        "outputPath": "C:\\Users\\jonat\\OneDrive\\Escritorio\\Nueva carpeta\\ShoppingCart\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
