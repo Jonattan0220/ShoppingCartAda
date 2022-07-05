@@ -28,8 +28,27 @@
                             if (User.IsInRole("Client"))
                             {
                                  <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ProductItems" asp-action="Index">Comprar</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ProductItems" asp-action="Index">Comprar</a>
                                </li>
+                            }
+
+                            if (User.IsInRole("Admin"))
+                            {
+                                 <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ProductItems" asp-action="Index">Productos</a>
+                               </li>
+                            }
+                        }
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="OrderItems" asp-action="Index">Compras de los clientes (Transacciones)</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a>
+                                </li>
                             }
                         }
                     </ul>

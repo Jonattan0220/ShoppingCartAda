@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShoppingCart.Data;
 
@@ -11,9 +12,10 @@ using ShoppingCart.Data;
 namespace ShoppingCart.Data.Migrations
 {
     [DbContext(typeof(ShoppingCartContext))]
-    partial class ShoppingCartContextModelSnapshot : ModelSnapshot
+    [Migration("20220701212420_001")]
+    partial class _001
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,6 +190,9 @@ namespace ShoppingCart.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ProductItemId")
                         .IsRequired()
                         .HasColumnType("int");
@@ -197,10 +202,6 @@ namespace ShoppingCart.Data.Migrations
 
                     b.Property<long>("TotalQuantity")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("TransactionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()

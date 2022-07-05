@@ -10,7 +10,7 @@ namespace ShoppingCart.Models
     {
         public User()
         {
-            Orders = new HashSet<Order>();
+            OrderItems = new HashSet<OrderItem>();
         }
 
         [Required]
@@ -42,6 +42,6 @@ namespace ShoppingCart.Models
         public virtual UserAddressProvince UserAddressProvince { get; set; } = null!;
         [ForeignKey("UserAddressCityId")]
         public virtual UserAddressCity UserAddressCity { get; set; } = null!;
-        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
 }

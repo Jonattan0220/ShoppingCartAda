@@ -7,11 +7,22 @@
 
 <h1>Artículos</h1>
 
+@if (User.Identity.IsAuthenticated)
+    {
+        if (User.IsInRole("Admin"))
+        {
+                <p>
+                <a asp-action="Create">Registrar un nuevo artículo</a>
+            </p>
+        }
+    }
 <hr />
+<label id="TransactionErrorMessage"></label>
+ <h5>@TempData["TransactionErrorMessage"]</h5>
+ <h4>@TempData["PurchaseConfirmationMessage"]</h4>
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form>
             <div class="form-group">
                 <label asp-for="ProductTypeId" class="control-label"></label>
                 <select asp-for="ProductTypeId" class ="form-control" asp-items="ViewBag.ProductTypes" id="ProductTypeId" onchange="GetProductsById()"></select>
@@ -25,8 +36,8 @@
         </form>
     </div>
 </div>
-
 <br />
+
 <div id="dvPartial"></div>
 
 
@@ -49,15 +60,15 @@
                 selectedProductTypeId: selectedProductTypeId
             },
             success:function (data) {
-                console.log(data);
-                $("#ProductId").empty();
-            $.each(data, function (index, row) {
-                $("#ProductId").append("<option value='" + row.value + "'>" + row.text + "</option>");
-            });
-            GetProductItemsById();
+               console.log(data);
+                    $("#ProductId").empty();
+                    $.each(data, function (index, row) {
+                        $("#ProductId").append("<option value='" + row.value + "'>" + row.text + "</option>");
+                    });
+                GetProductItemsById();
             },
-            error: function() {
-                console.log("failure");
+            error: function(data) {
+                $("#TransactionErrorMessage").text(data.responseText);
             }
         })
     }
@@ -76,8 +87,8 @@
                  data: {
                 selectedProductId: selectedProductId
                  },
-                contentType: "application/json; charset=utf-8",
-                dataType: "html",
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "html",
                 success: function (response) {
                     $('#dvPartial').html(response);
                 },

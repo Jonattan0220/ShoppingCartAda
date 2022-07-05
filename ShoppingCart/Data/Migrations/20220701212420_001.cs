@@ -153,7 +153,6 @@ namespace ShoppingCart.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Price = table.Column<long>(type: "bigint", nullable: false),
-                    Quantity = table.Column<long>(type: "bigint", nullable: false),
                     Sold = table.Column<long>(type: "bigint", nullable: false),
                     Available = table.Column<long>(type: "bigint", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
@@ -189,7 +188,7 @@ namespace ShoppingCart.Data.Migrations
                     Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PostalCode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     IdentificationTypeId = table.Column<int>(type: "int", nullable: false),
-                    IdUserAddressProvinceId = table.Column<int>(type: "int", nullable: false),
+                    UserAddressProvinceId = table.Column<int>(type: "int", nullable: false),
                     UserAddressCityId = table.Column<int>(type: "int", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -224,8 +223,8 @@ namespace ShoppingCart.Data.Migrations
                         principalColumn: "UserAddressCityId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_UserAddressProvinces_IdUserAddressProvinceId",
-                        column: x => x.IdUserAddressProvinceId,
+                        name: "FK_AspNetUsers_UserAddressProvinces_UserAddressProvinceId",
+                        column: x => x.UserAddressProvinceId,
                         principalTable: "UserAddressProvinces",
                         principalColumn: "UserAddressProvinceId",
                         onDelete: ReferentialAction.Restrict);
@@ -317,27 +316,6 @@ namespace ShoppingCart.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    OrderId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TotalPrice = table.Column<long>(type: "bigint", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.OrderId);
-                    table.ForeignKey(
-                        name: "FK_Orders_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "OrderItems",
                 columns: table => new
                 {
@@ -347,16 +325,17 @@ namespace ShoppingCart.Data.Migrations
                     TotalPrice = table.Column<long>(type: "bigint", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProductItemId = table.Column<int>(type: "int", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false)
+                    OrderId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderItems", x => x.OrderItemId);
                     table.ForeignKey(
-                        name: "FK_OrderItems_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "OrderId",
+                        name: "FK_OrderItems_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_OrderItems_ProductItems_ProductItemId",
@@ -404,14 +383,14 @@ namespace ShoppingCart.Data.Migrations
                 column: "IdentificationTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_IdUserAddressProvinceId",
-                table: "AspNetUsers",
-                column: "IdUserAddressProvinceId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_UserAddressCityId",
                 table: "AspNetUsers",
                 column: "UserAddressCityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_UserAddressProvinceId",
+                table: "AspNetUsers",
+                column: "UserAddressProvinceId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -421,18 +400,13 @@ namespace ShoppingCart.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_OrderId",
-                table: "OrderItems",
-                column: "OrderId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_ProductItemId",
                 table: "OrderItems",
                 column: "ProductItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_UserId",
-                table: "Orders",
+                name: "IX_OrderItems_UserId",
+                table: "OrderItems",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -480,19 +454,10 @@ namespace ShoppingCart.Data.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "ProductItems");
-
-            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "ProductItemBrands");
-
-            migrationBuilder.DropTable(
-                name: "Products");
+                name: "ProductItems");
 
             migrationBuilder.DropTable(
                 name: "IdentificationTypes");
@@ -501,10 +466,16 @@ namespace ShoppingCart.Data.Migrations
                 name: "UserAddressCities");
 
             migrationBuilder.DropTable(
-                name: "ProductTypes");
+                name: "ProductItemBrands");
+
+            migrationBuilder.DropTable(
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "UserAddressProvinces");
+
+            migrationBuilder.DropTable(
+                name: "ProductTypes");
         }
     }
 }

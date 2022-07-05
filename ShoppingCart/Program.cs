@@ -29,8 +29,8 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<ShoppingCartContext>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    await ContextSeed.SeedRolesAsync(userManager, roleManager);
     context.Database.Migrate();
+    await ContextSeed.SeedRolesAsync(userManager, roleManager);
 }
 
 // Configure the HTTP request pipeline.

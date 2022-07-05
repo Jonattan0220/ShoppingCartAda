@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using ShoppingCart.Models;
+using ShoppingCart.Models.ViewModels;
 
 namespace ShoppingCart.Data
 {
@@ -20,7 +21,6 @@ namespace ShoppingCart.Data
         }
 
         public virtual DbSet<IdentificationType> IdentificationTypes { get; set; } = null!;
-        public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductItem> ProductItems { get; set; } = null!;
@@ -28,6 +28,9 @@ namespace ShoppingCart.Data
         public virtual DbSet<ProductType> ProductTypes { get; set; } = null!;
         public virtual DbSet<UserAddressCity> UserAddressCities { get; set; } = null!;
         public virtual DbSet<UserAddressProvince> UserAddressProvinces { get; set; } = null!;
+        public virtual DbSet<OrderItemViewModel> OrderItemsViewModel { get; set; } = null!;
+        public virtual DbSet<ProductItemViewModel> ProductItemsViewModel { get; set; } = null!;
+        public virtual DbSet<UserViewModel> UsersViewModel { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -12,8 +12,8 @@ using ShoppingCart.Data;
 namespace ShoppingCart.Data.Migrations
 {
     [DbContext(typeof(ShoppingCartContext))]
-    [Migration("20220625024633_001")]
-    partial class _001
+    [Migration("20220701215949_002")]
+    partial class _002
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -179,31 +179,6 @@ namespace ShoppingCart.Data.Migrations
                     b.ToTable("IdentificationTypes");
                 });
 
-            modelBuilder.Entity("ShoppingCart.Models.Order", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"), 1L, 1);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("TotalPrice")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("OrderId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Orders");
-                });
-
             modelBuilder.Entity("ShoppingCart.Models.OrderItem", b =>
                 {
                     b.Property<int>("OrderItemId")
@@ -215,10 +190,6 @@ namespace ShoppingCart.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("OrderId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
                     b.Property<int?>("ProductItemId")
                         .IsRequired()
                         .HasColumnType("int");
@@ -229,11 +200,15 @@ namespace ShoppingCart.Data.Migrations
                     b.Property<long>("TotalQuantity")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("OrderItemId");
 
-                    b.HasIndex("OrderId");
-
                     b.HasIndex("ProductItemId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("OrderItems");
                 });
@@ -310,9 +285,6 @@ namespace ShoppingCart.Data.Migrations
                     b.Property<int?>("ProductItemBrandId")
                         .IsRequired()
                         .HasColumnType("int");
-
-                    b.Property<long>("Quantity")
-                        .HasColumnType("bigint");
 
                     b.Property<long>("Sold")
                         .HasColumnType("bigint");
@@ -411,10 +383,6 @@ namespace ShoppingCart.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("IdUserAddressProvinceId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
                     b.Property<string>("Identification")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -470,13 +438,15 @@ namespace ShoppingCart.Data.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserAddressProvinceId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IdUserAddressProvinceId");
 
                     b.HasIndex("IdentificationTypeId");
 
@@ -489,6 +459,8 @@ namespace ShoppingCart.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("UserAddressCityId");
+
+                    b.HasIndex("UserAddressProvinceId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -586,34 +558,23 @@ namespace ShoppingCart.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ShoppingCart.Models.Order", b =>
-                {
-                    b.HasOne("ShoppingCart.Models.User", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ShoppingCart.Models.OrderItem", b =>
                 {
-                    b.HasOne("ShoppingCart.Models.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("ShoppingCart.Models.ProductItem", "ProductItem")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductItemId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Order");
+                    b.HasOne("ShoppingCart.Models.User", "User")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("ProductItem");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShoppingCart.Models.Product", b =>
@@ -648,12 +609,6 @@ namespace ShoppingCart.Data.Migrations
 
             modelBuilder.Entity("ShoppingCart.Models.User", b =>
                 {
-                    b.HasOne("ShoppingCart.Models.UserAddressProvince", "IdUserAddressProvince")
-                        .WithMany("Users")
-                        .HasForeignKey("IdUserAddressProvinceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("ShoppingCart.Models.IdentificationType", "IdentificationType")
                         .WithMany("Users")
                         .HasForeignKey("IdentificationTypeId")
@@ -666,11 +621,17 @@ namespace ShoppingCart.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("IdUserAddressProvince");
+                    b.HasOne("ShoppingCart.Models.UserAddressProvince", "UserAddressProvince")
+                        .WithMany("Users")
+                        .HasForeignKey("UserAddressProvinceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("IdentificationType");
 
                     b.Navigation("UserAddressCity");
+
+                    b.Navigation("UserAddressProvince");
                 });
 
             modelBuilder.Entity("ShoppingCart.Models.UserAddressCity", b =>
@@ -687,11 +648,6 @@ namespace ShoppingCart.Data.Migrations
             modelBuilder.Entity("ShoppingCart.Models.IdentificationType", b =>
                 {
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("ShoppingCart.Models.Order", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("ShoppingCart.Models.Product", b =>
@@ -716,7 +672,7 @@ namespace ShoppingCart.Data.Migrations
 
             modelBuilder.Entity("ShoppingCart.Models.User", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("ShoppingCart.Models.UserAddressCity", b =>
